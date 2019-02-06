@@ -4,6 +4,8 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+.idea/
+.SpaceShooter/.idea/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
