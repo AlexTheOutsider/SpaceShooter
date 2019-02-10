@@ -24,7 +24,7 @@ public class Spaceship : MonoBehaviour
         firingComponent.Update(this);
     }
 
-    public Spaceship(MovementComponent move, FiringComponent fire, BulletComponent bullet)
+    public void ConfigureSpaceship(MovementComponent move, FiringComponent fire, BulletComponent bullet)
     {
         movementComponent = move;
         firingComponent = fire;
@@ -73,7 +73,16 @@ public class Spaceship : MonoBehaviour
         if (other.gameObject.tag == "Boundary") return;
         if (gameObject.tag == other.gameObject.tag) return;
 
-        Destroy(gameObject);
-        Destroy(other.gameObject);
+        if (other.gameObject.tag == "Player")
+        {
+            EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);
+        }
+
+        if (gameObject.tag == "Player")
+        {
+            Time.timeScale = 0;
+            Destroy(gameObject);
+            print("Game Over!");
+        }
     }
 }

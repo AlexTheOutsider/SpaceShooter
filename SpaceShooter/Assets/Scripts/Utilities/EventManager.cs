@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class EventManager : Singleton<EventManager>
 {
-    private Dictionary<string, UnityEvent> eventDictionary = new Dictionary<string, UnityEvent>();
+    private readonly Dictionary<string, CustomEvent> eventDictionary = new Dictionary<string, CustomEvent>();
 /*    private static EventManager eventManager;
 
     public static EventManager instance
@@ -27,38 +29,44 @@ public class EventManager : Singleton<EventManager>
         }
     }*/
 
-    public void StartListening(string eventName, UnityAction listener)
+    public void StartListening(string eventName, UnityAction<GameObject> listener)
     {
-        UnityEvent thisEvent;
+        CustomEvent thisEvent;
         if (Instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
             thisEvent.AddListener(listener);
         }
         else
         {
-            thisEvent = new UnityEvent();
+            thisEvent = new CustomEvent ();
             thisEvent.AddListener(listener);
             Instance.eventDictionary.Add(eventName, thisEvent);
         }
     }
 
-    public void StopListening(string eventName, UnityAction listener)
+    public void StopListening(string eventName, UnityAction<GameObject> listener)
     {
         if (Instance == null) return;
         
-        UnityEvent thisEvent;
+        CustomEvent thisEvent;
         if (Instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
             thisEvent.RemoveListener(listener);
         }
     }
-
-    public void TriggerEvent(string eventName)
+    
+    public void TriggerEvent(string eventName, GameObject obj = null)
     {
-        UnityEvent thisEvent;
+        CustomEvent thisEvent;
         if (Instance.eventDictionary.TryGetValue(eventName, out thisEvent))
         {
-            thisEvent.Invoke();
+            thisEvent.Invoke(obj);
         }
     }
+}
+
+[Serializable]
+public class CustomEvent : UnityEvent<GameObject>
+{
+    
 }
