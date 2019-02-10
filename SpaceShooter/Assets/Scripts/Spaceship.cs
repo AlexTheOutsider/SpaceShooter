@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEditor.SceneManagement;
-using UnityEngine;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
 public class Spaceship : MonoBehaviour
 {
@@ -10,15 +7,38 @@ public class Spaceship : MonoBehaviour
     public BulletComponent bulletComponent;
     public string type;
 
-    public float xDegree, yDegree, zDegree;
-
     private void Awake()
+    {
+        RandomGenerate();
+    }
+    
+    private void Start()
+    {
+        movementComponent.Start(this);
+        firingComponent.Start(this);
+    }
+
+    private void Update()
+    {
+        movementComponent.Update(this);
+        firingComponent.Update(this);
+    }
+
+    public Spaceship(MovementComponent move, FiringComponent fire, BulletComponent bullet)
+    {
+        movementComponent = move;
+        firingComponent = fire;
+        bulletComponent = bullet;
+    }
+    
+    private void RandomGenerate()
     {
         if (type == "Player")
         {
             movementComponent = new ManualMovement();
             firingComponent = new NonstopFiring();
             bulletComponent = new NormalBullet();
+            gameObject.tag = "Player";
         }
         else
         {
@@ -35,23 +55,25 @@ public class Spaceship : MonoBehaviour
                     break;
             }
             firingComponent = new IntervalFiring();
-            bulletComponent = new ScatteringBullet();
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    bulletComponent = new NormalBullet();
+                    break;
+                case 1:
+                    bulletComponent = new ScatteringBullet();;
+                    break;
+            }
+            gameObject.tag = "Enemy";
         }
     }
 
-    private void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        movementComponent.Start(this);
-        firingComponent.Start(this);
-    }
+        if (other.gameObject.tag == "Boundary") return;
+        if (gameObject.tag == other.gameObject.tag) return;
 
-    private void Update()
-    {
-        movementComponent.Update(this);
-        firingComponent.Update(this);
-
-        xDegree = transform.eulerAngles.x;
-        yDegree = transform.eulerAngles.y;
-        zDegree = transform.eulerAngles.z;
+        Destroy(gameObject);
+        Destroy(other.gameObject);
     }
 }

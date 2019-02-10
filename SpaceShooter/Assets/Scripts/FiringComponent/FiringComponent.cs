@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class FiringComponent
@@ -9,10 +6,10 @@ public class FiringComponent
     public int consecutiveBullets = 3;
     public float consecutiveInterval =0.1f;
     public float waveInterval = 0.5f;
-    public BulletComponent bullet;
     
     protected float waitTime;
     protected bool isFiring;
+    protected BulletComponent bullet;
 
     public void Start(Spaceship ship)
     {
@@ -24,5 +21,5 @@ public class FiringComponent
         Fire(ship);
     }
 
-    public virtual void Fire(Spaceship ship){}
+    protected virtual void Fire(Spaceship ship){}
 }

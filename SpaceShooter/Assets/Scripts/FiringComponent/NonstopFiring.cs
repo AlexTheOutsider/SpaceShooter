@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NonstopFiring : FiringComponent
 {
-    public override void Fire(Spaceship ship)
+    protected override void Fire(Spaceship ship)
     {
         waitTime += Time.deltaTime;
         if (waitTime > waveInterval)

@@ -7,11 +7,18 @@ using UnityEngine;
 public class BulletComponent
 {
     public float speed = 10f;
-    
-    public void GiveSpeed(GameObject obj)
+
+    private Spaceship ship;
+
+    protected void GiveSpeed(GameObject obj)
     {
         obj.GetComponent<Rigidbody>().velocity = obj.transform.forward * speed;
+        obj.tag = ship.type == "Player" ? "Player" : "Enemy";
     }
 
-    public virtual void GenerateBullet(Spaceship ship){}
+    public virtual void GenerateBullet(Spaceship ship)
+    {
+        if (this.ship != null) return;
+        this.ship = ship;
+    }
 }
