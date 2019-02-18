@@ -3,31 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[Serializable]
+public class CustomEvent : UnityEvent<GameObject> {}
+
 public class EventManager : Singleton<EventManager>
 {
     private readonly Dictionary<string, CustomEvent> eventDictionary = new Dictionary<string, CustomEvent>();
-/*    private static EventManager eventManager;
-
-    public static EventManager instance
-    {
-        get
-        {
-            if (!eventManager)
-            {
-                eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
-                if (!eventManager)
-                {
-                    Debug.LogError("can't find event manager!");
-                }
-                else
-                {
-                    eventManager.Init();
-                }
-            }
-
-            return eventManager;
-        }
-    }*/
 
     public void StartListening(string eventName, UnityAction<GameObject> listener)
     {
@@ -63,10 +44,4 @@ public class EventManager : Singleton<EventManager>
             thisEvent.Invoke(obj);
         }
     }
-}
-
-[Serializable]
-public class CustomEvent : UnityEvent<GameObject>
-{
-    
 }

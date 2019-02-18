@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
@@ -15,6 +16,8 @@ public class EnemyManager : Singleton<EnemyManager>
     private Vector3 newSpawnPosition;
     private List<GameObject> enemies;
     private List<GameObject> enemiesToDestroy;
+    private Text scoreText;
+    private int score;
 
     private void OnEnable()
     {
@@ -31,6 +34,8 @@ public class EnemyManager : Singleton<EnemyManager>
         spawnPoints = GameObject.Find("Spawn Points").transform.GetComponentsInChildren<Transform>();
         enemies = new List<GameObject>();
         enemiesToDestroy = new List<GameObject>();
+        scoreText = GameObject.Find("Canvas").transform.Find("Score").GetComponent<Text>();
+        scoreText.text = "0";
     }
 
     private void Update()
@@ -74,6 +79,8 @@ public class EnemyManager : Singleton<EnemyManager>
     private void EnemyKilled(GameObject obj)
     {
         enemiesToDestroy.Add(obj);
+        score++;
+        scoreText.text = score.ToString();
         if (--enemyLeft <= 0)
         {
             waveCleared = true;
