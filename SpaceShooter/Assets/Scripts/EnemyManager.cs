@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class EnemyKilledEvent : MyEvent
+{
+    public GameObject enemyToDestroy;
+    public int score;
+
+    public EnemyKilledEvent(GameObject obj,int score)
+    {
+        enemyToDestroy = obj;
+        this.score = score;
+    }
+}
+
 public class EnemyManager : Singleton<EnemyManager>
 {
     public int enemyNumber = 3;
@@ -21,12 +33,14 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void OnEnable()
     {
-        EventManager.Instance.StartListening("EnemyKilled", EnemyKilled);
+        //EventManager.Instance.StartListening("EnemyKilled", EnemyKilled);
+        EventManagerNew.Instance.Register<EnemyKilledEvent>(EnemyKilled);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.StopListening("EnemyKilled", EnemyKilled);
+        //EventManager.Instance.StopListening("EnemyKilled", EnemyKilled);
+        EventManagerNew.Instance.Unregister<EnemyKilledEvent>(EnemyKilled);
     }
 
     private void Start()
@@ -76,7 +90,7 @@ public class EnemyManager : Singleton<EnemyManager>
         newSpawnPosition = newSpawn.position;
     }
 
-    private void EnemyKilled(GameObject obj)
+    /*    private void EnemyKilled(GameObject obj)
     {
         enemiesToDestroy.Add(obj);
         score++;
@@ -85,5 +99,17 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             waveCleared = true;
         }
+    }*/
+    
+    private void EnemyKilled(MyEvent myEvent)
+    {
+        enemiesToDestroy.Add(((EnemyKilledEvent)myEvent).enemyToDestroy);
+        if (--enemyLeft <= 0)
+        {
+            waveCleared = true;
+        }
+
+        score += ((EnemyKilledEvent)myEvent).score;
+        scoreText.text = score.ToString();
     }
 }

@@ -6,6 +6,7 @@ public class Spaceship : MonoBehaviour
     public FiringComponent firingComponent;
     public BulletComponent bulletComponent;
     public string type;
+    public int score;
 
     private void Awake()
     {
@@ -59,9 +60,11 @@ public class Spaceship : MonoBehaviour
             {
                 case 0:
                     bulletComponent = new NormalBullet();
+                    score = 5;
                     break;
                 case 1:
-                    bulletComponent = new ScatteringBullet();;
+                    bulletComponent = new ScatteringBullet();
+                    score = 10;
                     break;
             }
             gameObject.tag = "Enemy";
@@ -75,7 +78,8 @@ public class Spaceship : MonoBehaviour
 
         if (other.gameObject.tag == "Player")
         {
-            EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);
+            //EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);
+            EventManagerNew.Instance.Fire(new EnemyKilledEvent(gameObject,score));
         }
 
         if (gameObject.tag == "Player")
