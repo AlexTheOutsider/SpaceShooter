@@ -9,7 +9,8 @@ public class DestroyByBoundary : MonoBehaviour
         if (other.gameObject.tag == "Enemy" && other.gameObject.GetComponent<Spaceship>())
         {
             //EventManager.Instance.TriggerEvent("EnemyKilled", other.gameObject);
-            EventManagerNew.Instance.Fire(new EnemyKilledEvent(other.gameObject,0));
+            //EventManagerNew.Instance.Fire(new EnemyKilledEvent(other.gameObject,0));
+            Services.EventManagerNew.Fire(new EnemyKilledEvent(other.gameObject,0));
         }
         else
             Destroy(other.gameObject);
