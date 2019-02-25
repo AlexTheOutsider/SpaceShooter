@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour
         EventManagerNew.Instance.Unregister<GameOverEvent>(GameOver);
     }
 
-    private void GameOver(MyEvent myEvent)
+    // this is not type safe because the parameter is still the base event class
+    private void GameOver(GameOverEvent myEvent)
     {
         Time.timeScale = 0;
         Destroy(((GameOverEvent)myEvent).objToDestroy);

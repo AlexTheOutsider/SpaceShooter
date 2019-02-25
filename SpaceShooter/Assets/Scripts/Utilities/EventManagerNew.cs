@@ -9,8 +9,35 @@ public abstract class MyEvent {}
 public class EventManagerNew : Singleton<EventManagerNew>
 {
     private readonly Dictionary<Type, Action<MyEvent>> registeredHandlers = new Dictionary<Type, Action<MyEvent>>();
+    private readonly Dictionary<Delegate, Action<MyEvent>> registeredHandlersLookup = new Dictionary<Delegate, Action<MyEvent>>();
     private readonly List<MyEvent> queuedEvents = new List<MyEvent>();
 
+    // type safe version of Register function
+    public void Register<T> (Action<T> handler) where T : MyEvent
+    {
+        // you can't register same handler twice
+        // however, in type unsafe version you can register the same handler to different events
+        if (registeredHandlersLookup.ContainsKey(handler))
+        {
+            return;
+        }
+
+        // we store "internalDelegate" into the list, rather than store handler itself in type unsafe version
+        // here T is a sub event so it is type safe
+        Action<MyEvent> internalDelegate = e => handler((T)e);
+        registeredHandlersLookup[handler] = internalDelegate;
+        
+        Type type = typeof(T);
+        if (registeredHandlers.ContainsKey(type))
+        {
+            registeredHandlers[type] += internalDelegate;
+        }
+        else
+        {
+            registeredHandlers[type] = internalDelegate;
+        }
+    }
+    
     public void Register<T>(Action<MyEvent> handler) where T : MyEvent
     {
         Type type = typeof(T);
@@ -24,6 +51,24 @@ public class EventManagerNew : Singleton<EventManagerNew>
         }
     }
 
+    public void Unregister<T>(Action<T> handler) where T : MyEvent
+    {
+        Type type = typeof(T);
+        Action<MyEvent> internalDelegate;
+        if (registeredHandlersLookup.TryGetValue(handler, out internalDelegate)) {
+            Action<MyEvent> tempDel;
+            if (registeredHandlers.TryGetValue(typeof(T), out tempDel)) {
+                tempDel -= internalDelegate;
+                if (tempDel == null) {
+                    registeredHandlers.Remove(type);
+                } else {
+                    registeredHandlers[type] = tempDel;
+                }
+            }
+            registeredHandlersLookup.Remove(handler);
+        }
+    }
+    
     public void Unregister<T>(Action<MyEvent> handler) where T : MyEvent
     {
         Type type = typeof(T);
@@ -53,7 +98,7 @@ public class EventManagerNew : Singleton<EventManagerNew>
     }
 
     public void QueueEvent(MyEvent e) {
-        queuedEvents.Insert(0, e);
+        queuedEvents.Add(e);
     }
 
     public void ProcessQueuedEvents() {

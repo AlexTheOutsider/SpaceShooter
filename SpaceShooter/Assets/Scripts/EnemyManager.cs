@@ -101,15 +101,15 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }*/
     
-    private void EnemyKilled(MyEvent myEvent)
+    private void EnemyKilled(EnemyKilledEvent myEvent)
     {
-        enemiesToDestroy.Add(((EnemyKilledEvent)myEvent).enemyToDestroy);
+        enemiesToDestroy.Add(myEvent.enemyToDestroy);
         if (enemies.Count - enemiesToDestroy.Count <= 0)
         {
             waveCleared = true;
         }
 
-        score += ((EnemyKilledEvent)myEvent).score;
+        score += myEvent.score;
         scoreText.text = score.ToString();
     }
 }
