@@ -20,7 +20,7 @@ public class EnemyManager : Singleton<EnemyManager>
     public int enemyNumber = 3;
     public float spawnInterval = 1f;
     public float waveInterval = 3f;
-    [SerializeField] private int enemyLeft;
+    //[SerializeField] private int enemyLeft;
     [SerializeField] private bool waveCleared = true;
     [SerializeField] private int waveIndex;
 
@@ -69,7 +69,7 @@ public class EnemyManager : Singleton<EnemyManager>
     {      
         waveIndex++;
         waveCleared = false;
-        enemyLeft = enemyNumber;
+        //enemyLeft = enemyNumber;
         enemies.Clear();
         yield return new WaitForSeconds(waveInterval);
 
@@ -104,7 +104,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private void EnemyKilled(MyEvent myEvent)
     {
         enemiesToDestroy.Add(((EnemyKilledEvent)myEvent).enemyToDestroy);
-        if (--enemyLeft <= 0)
+        if (enemies.Count - enemiesToDestroy.Count <= 0)
         {
             waveCleared = true;
         }

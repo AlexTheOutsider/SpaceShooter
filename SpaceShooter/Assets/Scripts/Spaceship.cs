@@ -84,9 +84,7 @@ public class Spaceship : MonoBehaviour
 
         if (gameObject.tag == "Player")
         {
-            Time.timeScale = 0;
-            Destroy(gameObject);
-            print("Game Over!");
+            EventManagerNew.Instance.Fire(new GameOverEvent(gameObject));
         }
     }
 }
