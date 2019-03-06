@@ -27,12 +27,12 @@ public class Phase2 : Task
 
     internal override void Update()
     {
-        timeElasped += Time.deltaTime;
+/*        timeElasped += Time.deltaTime;
         if (timeElasped > duration)
         {
             SetStatus(TaskStatus.Success);
             return;
-        }
+        }*/
         
         boss.movementComponent.Update(boss);
         boss.firingComponent.Update(boss);

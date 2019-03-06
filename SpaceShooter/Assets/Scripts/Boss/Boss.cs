@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class Boss : Spaceship
 {
+    public float maxHP = 5f;
     private readonly SerialTasks phases = new SerialTasks();
+
+    protected override void Awake()
+    {
+    }
 
     private void Start()
     {
+        hitPoints = maxHP;
         phases.Add(new Phase1(this));
         phases.Add(new Phase2(this));
     }

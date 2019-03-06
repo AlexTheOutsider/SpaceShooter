@@ -20,6 +20,7 @@ public class EnemyManager : Singleton<EnemyManager>
     public int enemyNumber = 3;
     public float spawnInterval = 1f;
     public float waveInterval = 3f;
+    public int waveBeforeBoss = 1;
     //[SerializeField] private int enemyLeft;
     [SerializeField] private bool waveCleared = true;
     [SerializeField] private int waveIndex;
@@ -62,7 +63,15 @@ public class EnemyManager : Singleton<EnemyManager>
         enemiesToDestroy.Clear();
 
         if (!waveCleared) return;
-        StartCoroutine(SpawnEnemies());
+
+        if (waveIndex < waveBeforeBoss)
+        {
+            StartCoroutine(SpawnEnemies());
+        }
+        else
+        {
+            StartCoroutine(SpawnBoss());
+        }
     }
 
     IEnumerator SpawnEnemies()
@@ -72,7 +81,6 @@ public class EnemyManager : Singleton<EnemyManager>
         //enemyLeft = enemyNumber;
         enemies.Clear();
         yield return new WaitForSeconds(waveInterval);
-
         for (int i = 0; i < enemyNumber; i++)
         {
             GetRandomSpawnPosition();
@@ -82,6 +90,22 @@ public class EnemyManager : Singleton<EnemyManager>
             
             yield return new WaitForSeconds(spawnInterval);
         }
+    }
+    
+    IEnumerator SpawnBoss()
+    {      
+        waveIndex = 0;
+        waveCleared = false;
+        //enemyLeft = enemyNumber;
+        enemies.Clear();
+        yield return new WaitForSeconds(waveInterval);
+
+        GetRandomSpawnPosition();
+        GameObject newEnemy = Instantiate(Resources.Load("Prefabs/Boss"), newSpawnPosition,
+            ((GameObject) Resources.Load("Prefabs/Boss")).transform.rotation) as GameObject;
+        enemies.Add(newEnemy);
+        
+        yield return new WaitForSeconds(spawnInterval);
     }
 
     private void GetRandomSpawnPosition()

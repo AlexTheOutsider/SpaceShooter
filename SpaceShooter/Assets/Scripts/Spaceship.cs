@@ -7,8 +7,9 @@ public class Spaceship : MonoBehaviour
     public BulletComponent bulletComponent;
     public string type;
     public int score;
+    public float hitPoints;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         RandomGenerate();
     }
@@ -68,6 +69,7 @@ public class Spaceship : MonoBehaviour
                     break;
             }
             gameObject.tag = "Enemy";
+            hitPoints = 1;
         }
     }
 
@@ -78,8 +80,13 @@ public class Spaceship : MonoBehaviour
 
         if (other.gameObject.tag == "Player")
         {
-            //EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);
-            EventManagerNew.Instance.Fire(new EnemyKilledEvent(gameObject,score));
+            Destroy(other.gameObject);
+            hitPoints--;
+            if (hitPoints <= 0)
+            {
+                //EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);
+                EventManagerNew.Instance.Fire(new EnemyKilledEvent(gameObject, score));
+            }
         }
 
         if (gameObject.tag == "Player")

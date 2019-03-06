@@ -27,14 +27,25 @@ public class Phase1 : Task
 
     internal override void Update()
     {
-        timeElasped += Time.deltaTime;
+/*        timeElasped += Time.deltaTime;
         if (timeElasped > duration)
         {
             SetStatus(TaskStatus.Success);
             return;
-        }
+        }*/
         
         boss.movementComponent.Update(boss);
         boss.firingComponent.Update(boss);
+
+        DetectHP();
+    }
+
+    private void DetectHP()
+    {
+        if (boss.hitPoints / boss.maxHP < 0.95f)
+        {
+            Debug.Log("Switch Phase!");
+            SetStatus(TaskStatus.Success);
+        }
     }
 }
