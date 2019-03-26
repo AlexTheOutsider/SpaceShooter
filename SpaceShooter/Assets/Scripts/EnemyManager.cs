@@ -21,6 +21,9 @@ public class EnemyManager : Singleton<EnemyManager>
     public float spawnInterval = 1f;
     public float waveInterval = 3f;
     public int waveBeforeBoss = 1;
+
+    // the count of enemies that is going to spawn in this wave
+    [SerializeField]private int enemiesWaitingCounts;
     //[SerializeField] private int enemyLeft;
     [SerializeField] private bool waveCleared = true;
     [SerializeField] private int waveIndex;
@@ -60,6 +63,7 @@ public class EnemyManager : Singleton<EnemyManager>
             enemies.Remove(dead);
             Destroy(dead);
         }
+
         enemiesToDestroy.Clear();
 
         if (!waveCleared) return;
@@ -75,18 +79,22 @@ public class EnemyManager : Singleton<EnemyManager>
     }
 
     IEnumerator SpawnEnemies()
-    {      
-        waveIndex++;
+    {     
         waveCleared = false;
-        //enemyLeft = enemyNumber;
         enemies.Clear();
+        waveIndex++;
+        enemiesWaitingCounts = enemyNumber;
+
+        //enemyLeft = enemyNumber;
         yield return new WaitForSeconds(waveInterval);
+        
         for (int i = 0; i < enemyNumber; i++)
         {
             GetRandomSpawnPosition();
             GameObject newEnemy = Instantiate(Resources.Load("Prefabs/Enemy"), newSpawnPosition,
                 ((GameObject) Resources.Load("Prefabs/Enemy")).transform.rotation) as GameObject;
             enemies.Add(newEnemy);
+            enemiesWaitingCounts--;
             
             yield return new WaitForSeconds(spawnInterval);
         }
@@ -94,16 +102,19 @@ public class EnemyManager : Singleton<EnemyManager>
     
     IEnumerator SpawnBoss()
     {      
-        waveIndex = 0;
         waveCleared = false;
         //enemyLeft = enemyNumber;
         enemies.Clear();
+        waveIndex = 0;
+        enemiesWaitingCounts = 1;
+
         yield return new WaitForSeconds(waveInterval);
 
         GetRandomSpawnPosition();
         GameObject newEnemy = Instantiate(Resources.Load("Prefabs/Boss"), newSpawnPosition,
             ((GameObject) Resources.Load("Prefabs/Boss")).transform.rotation) as GameObject;
         enemies.Add(newEnemy);
+        enemiesWaitingCounts--;
         
         yield return new WaitForSeconds(spawnInterval);
     }
@@ -128,7 +139,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private void EnemyKilled(EnemyKilledEvent myEvent)
     {
         enemiesToDestroy.Add(myEvent.enemyToDestroy);
-        if (enemies.Count - enemiesToDestroy.Count <= 0)
+        if (enemies.Count - enemiesToDestroy.Count <= 0 && enemiesWaitingCounts == 0)
         {
             waveCleared = true;
         }
