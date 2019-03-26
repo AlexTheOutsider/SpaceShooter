@@ -38,6 +38,7 @@ public class EventManagerNew : Singleton<EventManagerNew>
         }
     }
     
+    // it is not type safe since you could possibly register a EventOne Handler to EventTwo
     public void Register<T>(Action<MyEvent> handler) where T : MyEvent
     {
         Type type = typeof(T);
