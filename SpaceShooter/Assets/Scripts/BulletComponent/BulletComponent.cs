@@ -18,7 +18,9 @@ public class BulletComponent
 
     public virtual void GenerateBullet(Spaceship ship)
     {
+        // so that this assignment will only be executed for once
         if (this.ship != null) return;
+        
         this.ship = ship;
     }
 }

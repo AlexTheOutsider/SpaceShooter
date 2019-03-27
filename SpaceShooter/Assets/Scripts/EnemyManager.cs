@@ -111,10 +111,22 @@ public class EnemyManager : Singleton<EnemyManager>
         yield return new WaitForSeconds(waveInterval);
 
         GetRandomSpawnPosition();
-        GameObject newEnemy = Instantiate(Resources.Load("Prefabs/Boss"), newSpawnPosition,
-            ((GameObject) Resources.Load("Prefabs/Boss")).transform.rotation) as GameObject;
+        int randomBoss = Random.Range(0, 2);
+        GameObject newEnemy = new GameObject();
+        switch (randomBoss)
+        {
+            case 0:
+                newEnemy = Instantiate(Resources.Load("Prefabs/BossNew"), newSpawnPosition,
+                    ((GameObject) Resources.Load("Prefabs/BossNew")).transform.rotation) as GameObject;
+                break;
+            case 1:
+                newEnemy = Instantiate(Resources.Load("Prefabs/Boss"), newSpawnPosition,
+                    ((GameObject) Resources.Load("Prefabs/Boss")).transform.rotation) as GameObject;
+                break;
+        }
         enemies.Add(newEnemy);
         enemiesWaitingCounts--;
+        EventManagerNew.Instance.Fire(new EnterBossEvent());
         
         yield return new WaitForSeconds(spawnInterval);
     }
@@ -142,6 +154,10 @@ public class EnemyManager : Singleton<EnemyManager>
         if (enemies.Count - enemiesToDestroy.Count <= 0 && enemiesWaitingCounts == 0)
         {
             waveCleared = true;
+            if (myEvent.enemyToDestroy.CompareTag("Boss"))
+            {
+                EventManagerNew.Instance.Fire(new ExitBossEvent());
+            }
         }
 
         score += myEvent.score;
