@@ -7,6 +7,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject gameOverText;
+    public GameObject bossHpSlider;
     
     [SerializeField] private FSM<GameManager> _fsm;
     

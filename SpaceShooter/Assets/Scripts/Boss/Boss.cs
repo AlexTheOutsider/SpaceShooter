@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Boss : Spaceship
 {
-    public float maxHP = 5f;
     private readonly SerialTasks phases = new SerialTasks();
 
     protected override void Awake()

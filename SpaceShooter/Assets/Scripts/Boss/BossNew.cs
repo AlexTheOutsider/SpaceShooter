@@ -16,7 +16,6 @@ public class BossNew : Spaceship
         hitPoints = maxHP;
         firingComponent = new IntervalFiring();
         bulletComponent = new ScatteringBullet();
-        tag = "Boss";
 
         firingComponent.Start(this);
 

@@ -66,7 +66,7 @@ public class FSM<TContext> : ScriptableObject
     // We define the base class for states inside the FSM class so it's tied to the
     // context type of the FSM class. This way you can't try to transition to a state
     // that is for a different type of context.
-    public abstract class State
+    public abstract class State : ScriptableObject
     {
         internal FSM<TContext> Parent { get; set; }
 

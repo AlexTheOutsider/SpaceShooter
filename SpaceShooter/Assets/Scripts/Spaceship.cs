@@ -8,6 +8,7 @@ public class Spaceship : MonoBehaviour
     public string type;
     public int score;
     public float hitPoints;
+    public float maxHP;
 
     protected virtual void Awake()
     {
@@ -82,6 +83,10 @@ public class Spaceship : MonoBehaviour
         {
             Destroy(other.gameObject);
             hitPoints--;
+            if (gameObject.tag == "Boss")
+            {
+                EventManagerNew.Instance.Fire(new BossHealthEvent(hitPoints/maxHP));
+            }
             if (hitPoints <= 0)
             {
                 //EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);

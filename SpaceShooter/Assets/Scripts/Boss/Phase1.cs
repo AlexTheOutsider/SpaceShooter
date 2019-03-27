@@ -19,7 +19,6 @@ public class Phase1 : Task
         boss.movementComponent = new PatrolMovement(10f);
         boss.firingComponent = new IntervalFiring();
         boss.bulletComponent = new NormalBullet();
-        boss.tag = "Enemy";
         
         boss.movementComponent.Start(boss);
         boss.firingComponent.Start(boss);
@@ -44,7 +43,7 @@ public class Phase1 : Task
     {
         if (boss.hitPoints / boss.maxHP < 0.95f)
         {
-            Debug.Log("Switch Phase!");
+            //Debug.Log("Switch Phase!");
             SetStatus(TaskStatus.Success);
         }
     }

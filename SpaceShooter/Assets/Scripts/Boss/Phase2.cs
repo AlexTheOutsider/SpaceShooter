@@ -19,7 +19,6 @@ public class Phase2 : Task
         boss.movementComponent = new PatrolMovement(3f);
         boss.firingComponent = new IntervalFiring();
         boss.bulletComponent = new ScatteringBullet();
-        boss.tag = "Enemy";
         
         boss.movementComponent.Start(boss);
         boss.firingComponent.Start(boss);
