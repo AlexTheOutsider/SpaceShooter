@@ -8,15 +8,15 @@ public class GamePlayState : FSM<GameManager>.State
     
     public override void OnEnter()
     {
-        EventManagerNew.Instance.Register<EnterBossEvent>(EnterBoss);
-        EventManagerNew.Instance.Register<GameOverEvent>(GameOver);
+        Services.EventManagerNew.Register<EnterBossEvent>(EnterBoss);
+        Services.EventManagerNew.Register<GameOverEvent>(GameOver);
         //gameOverText = Context.canvas.transform.Find("GameOver").gameObject;
     }
 
     public override void OnExit()
     {
-        EventManagerNew.Instance.Unregister<EnterBossEvent>(EnterBoss);
-        EventManagerNew.Instance.Unregister<GameOverEvent>(GameOver);
+        Services.EventManagerNew.Unregister<EnterBossEvent>(EnterBoss);
+        Services.EventManagerNew.Unregister<GameOverEvent>(GameOver);
     }
     
     private void EnterBoss(EnterBossEvent myEvent)

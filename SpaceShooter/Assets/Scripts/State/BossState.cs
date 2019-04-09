@@ -10,8 +10,8 @@ public class BossState : FSM<GameManager>.State
 
     public override void OnEnter()
     {
-        EventManagerNew.Instance.Register<BossHealthEvent>(UpdateHP);
-        EventManagerNew.Instance.Register<ExitBossEvent>(ExitBoss);
+        Services.EventManagerNew.Register<BossHealthEvent>(UpdateHP);
+        Services.EventManagerNew.Register<ExitBossEvent>(ExitBoss);
         
         //bossHP = Context.canvas.transform.Find("BossHP").gameObject;
         Context.bossHpSlider.SetActive(true);
@@ -20,8 +20,8 @@ public class BossState : FSM<GameManager>.State
     
     public override void OnExit()
     {
-        EventManagerNew.Instance.Unregister<BossHealthEvent>(UpdateHP);
-        EventManagerNew.Instance.Unregister<ExitBossEvent>(ExitBoss);
+        Services.EventManagerNew.Unregister<BossHealthEvent>(UpdateHP);
+        Services.EventManagerNew.Unregister<ExitBossEvent>(ExitBoss);
         
         Context.bossHpSlider.SetActive(false);
     }

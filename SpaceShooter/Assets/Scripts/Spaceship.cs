@@ -85,18 +85,18 @@ public class Spaceship : MonoBehaviour
             hitPoints--;
             if (gameObject.tag == "Boss")
             {
-                EventManagerNew.Instance.Fire(new BossHealthEvent(hitPoints/maxHP));
+                Services.EventManagerNew.Fire(new BossHealthEvent(hitPoints/maxHP));
             }
             if (hitPoints <= 0)
             {
                 //EventManager.Instance.TriggerEvent("EnemyKilled",gameObject);
-                EventManagerNew.Instance.Fire(new EnemyKilledEvent(gameObject, score));
+                Services.EventManagerNew.Fire(new EnemyKilledEvent(gameObject, score));
             }
         }
 
         if (gameObject.tag == "Player")
         {
-            EventManagerNew.Instance.Fire(new GameOverEvent(gameObject));
+            Services.EventManagerNew.Fire(new GameOverEvent(gameObject));
         }
     }
 }

@@ -15,7 +15,7 @@ public class EnemyKilledEvent : MyEvent
     }
 }
 
-public class EnemyManager : Singleton<EnemyManager>
+public class EnemyManager : MonoBehaviour
 {
     public int enemyNumber = 3;
     public float spawnInterval = 1f;
@@ -38,25 +38,27 @@ public class EnemyManager : Singleton<EnemyManager>
     private void OnEnable()
     {
         //EventManager.Instance.StartListening("EnemyKilled", EnemyKilled);
-        EventManagerNew.Instance.Register<EnemyKilledEvent>(EnemyKilled);
+        //Services.EventManagerNew.Register<EnemyKilledEvent>(EnemyKilled);
     }
 
     private void OnDisable()
     {
         //EventManager.Instance.StopListening("EnemyKilled", EnemyKilled);
-        EventManagerNew.Instance.Unregister<EnemyKilledEvent>(EnemyKilled);
+        //Services.EventManagerNew.Unregister<EnemyKilledEvent>(EnemyKilled);
     }
 
-    private void Start()
+    public void Start()
     {
         spawnPoints = GameObject.Find("Spawn Points").transform.GetComponentsInChildren<Transform>();
         enemies = new List<GameObject>();
         enemiesToDestroy = new List<GameObject>();
         scoreText = GameObject.Find("Canvas").transform.Find("Score").GetComponent<Text>();
         scoreText.text = "0";
+        
+        Services.EventManagerNew.Register<EnemyKilledEvent>(EnemyKilled);
     }
 
-    private void Update()
+    public void Update()
     {
         foreach (GameObject dead in enemiesToDestroy)
         {
@@ -126,7 +128,7 @@ public class EnemyManager : Singleton<EnemyManager>
         }
         enemies.Add(newEnemy);
         enemiesWaitingCounts--;
-        EventManagerNew.Instance.Fire(new EnterBossEvent());
+        Services.EventManagerNew.Fire(new EnterBossEvent());
         
         yield return new WaitForSeconds(spawnInterval);
     }
@@ -156,7 +158,7 @@ public class EnemyManager : Singleton<EnemyManager>
             waveCleared = true;
             if (myEvent.enemyToDestroy.CompareTag("Boss"))
             {
-                EventManagerNew.Instance.Fire(new ExitBossEvent());
+                Services.EventManagerNew.Fire(new ExitBossEvent());
             }
         }
 
