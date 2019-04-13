@@ -7,7 +7,7 @@ public abstract class MyEvent {}
 // right now we only have one version of event manager,
 // so we don't need to separate service interface and service provider class
 // we may also want a logging decorator class to add log optionally
-public class EventManagerNew : MonoBehaviour
+public class EventManagerNew
 {
     private readonly Dictionary<Type, Action<MyEvent>> registeredHandlers = new Dictionary<Type, Action<MyEvent>>();
     private readonly Dictionary<Delegate, Action<MyEvent>> registeredHandlersLookup = new Dictionary<Delegate, Action<MyEvent>>();

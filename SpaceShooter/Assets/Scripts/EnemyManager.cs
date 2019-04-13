@@ -38,13 +38,13 @@ public class EnemyManager : MonoBehaviour
     private void OnEnable()
     {
         //EventManager.Instance.StartListening("EnemyKilled", EnemyKilled);
-        //Services.EventManagerNew.Register<EnemyKilledEvent>(EnemyKilled);
+        Services.EventManagerNew.Register<EnemyKilledEvent>(EnemyKilled);
     }
 
     private void OnDisable()
     {
         //EventManager.Instance.StopListening("EnemyKilled", EnemyKilled);
-        //Services.EventManagerNew.Unregister<EnemyKilledEvent>(EnemyKilled);
+        Services.EventManagerNew.Unregister<EnemyKilledEvent>(EnemyKilled);
     }
 
     public void Start()
@@ -55,7 +55,7 @@ public class EnemyManager : MonoBehaviour
         scoreText = GameObject.Find("Canvas").transform.Find("Score").GetComponent<Text>();
         scoreText.text = "0";
         
-        Services.EventManagerNew.Register<EnemyKilledEvent>(EnemyKilled);
+        //Services.EventManagerNew.Register<EnemyKilledEvent>(EnemyKilled);
     }
 
     public void Update()
