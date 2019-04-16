@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Services.EventManagerNew = new EventManagerNew();
-        gameObject.AddComponent<EnemyManager>();
+        //gameObject.AddComponent<EnemyManager>();
         //Services.EnemyManager = new EnemyManager();
         
         _fsm = new FSM<GameManager>(this);
